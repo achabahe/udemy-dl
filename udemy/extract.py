@@ -133,7 +133,6 @@ class Udemy:
         results = []
         self._session._headers.update(
             {
-                "Host": "{portal_name}.udemy.com".format(portal_name=portal_name),
                 "Referer": "https://{portal_name}.udemy.com/home/my-courses/search/?q={course_name}".format(
                     portal_name=portal_name, course_name=course_name
                 ),

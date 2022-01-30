@@ -59,7 +59,7 @@ HEADERS = {
     "Accept-Encoding": None,
     # "Connection": "keep-alive",
 }
-
+proxies = {}
 
 __ALL__ = [
     "re",

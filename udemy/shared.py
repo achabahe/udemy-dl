@@ -30,6 +30,7 @@ from udemy.compat import (
     requests,
     conn_error,
     HEADERS,
+    proxies
 )
 from udemy.ffmpeg import FFMPeg
 from udemy.utils import to_file, prepare_html
@@ -162,7 +163,7 @@ class Downloader(object):
             try:
                 try:
                     response = self._sess.get(
-                        self.url, headers=headers, stream=True, timeout=10
+                        self.url, headers=headers, stream=True, timeout=10, proxies= proxies
                     )
                 except conn_error as error:
                     return {
@@ -598,7 +599,7 @@ class UdemyLectureStream(Downloader):
         if not self._fsize:
             headers = {"User-Agent": HEADERS.get("User-Agent")}
             try:
-                with requests.get(self.url, stream=True, headers=headers) as resp:
+                with requests.get(self.url, stream=True, headers=headers, proxies=proxies) as resp:
                     if resp.ok:
                         self._fsize = float(resp.headers.get("Content-Length", 0))
                     if not resp.ok:
@@ -662,7 +663,7 @@ class UdemyLectureAssets(Downloader):
         if not self._fsize:
             headers = {"User-Agent": HEADERS.get("User-Agent")}
             try:
-                with requests.get(self.url, stream=True, headers=headers) as resp:
+                with requests.get(self.url, stream=True, headers=headers, proxies=proxies) as resp:
                     if resp.ok:
                         self._fsize = float(resp.headers.get("Content-Length", 0))
                     if not resp.ok:
@@ -747,7 +748,7 @@ class UdemyLectureSubtitles(Downloader):
         if not self._fsize:
             headers = {"User-Agent": HEADERS.get("User-Agent")}
             try:
-                with requests.get(self.url, stream=True, headers=headers) as resp:
+                with requests.get(self.url, stream=True, headers=headers, proxies=proxies) as resp:
                     if resp.ok:
                         self._fsize = float(resp.headers.get("Content-Length", 0))
                     if not resp.ok:

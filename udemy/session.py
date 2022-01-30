@@ -27,6 +27,7 @@ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from udemy.compat import (
     requests,
     HEADERS,
+    proxies
 )
 
 
@@ -40,7 +41,7 @@ class Session(object):
         self._headers["X-Udemy-Authorization"] = "Bearer {}".format(access_token)
 
     def _get(self, url):
-        session = self._session.get(url, headers=self._headers)
+        session = self._session.get(url, headers=self._headers, proxies= proxies)
         if session.ok or session.status_code in [502, 503]:
             return session
         if not session.ok:
@@ -48,7 +49,7 @@ class Session(object):
 
     def _post(self, url, data, redirect=True):
         session = self._session.post(
-            url, data, headers=self._headers, allow_redirects=redirect
+            url, data, headers=self._headers, allow_redirects=redirect, proxies= proxies
         )
         if session.ok:
             return session

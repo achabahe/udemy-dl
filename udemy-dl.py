@@ -29,6 +29,7 @@ import sys
 import argparse
 
 import udemy
+from udemy.compat import proxies
 from udemy.logger import logger
 from udemy.getpass import getpass
 from udemy.vtt2srt import WebVtt2Srt
@@ -47,13 +48,16 @@ class Udemy(WebVtt2Srt, ProgressBar):
     """Udemy is class which implements downloading/lising and all"""
 
     def __init__(
-        self, url_or_courses, username="", password="", cookies="", cache_session=False
+        self, url_or_courses, username="", password="", cookies="", proxy=None, cache_session=False
     ):
         self.username = username
         self.password = password
         self.cookies = cookies
         self._cache_session = cache_session
         self.url_or_courses = url_or_courses
+        if(proxy):
+            proxies['http'] =  proxy
+            proxies['https'] =  proxy
         super(Udemy, self).__init__()
 
     def download_assets(self, assets, filepath):
@@ -503,6 +507,13 @@ def main():
         help="Download till specific position within chapter(s).",
         metavar="",
     )
+    advance.add_argument(
+        "--proxy",
+        dest="proxy",
+        type=str,
+        help="Proxy to use ex: socks5h://127.0.0.1:9050 .",
+        metavar="",
+    )
 
     other = parser.add_argument_group("Others")
     other.add_argument(
@@ -596,6 +607,7 @@ def main():
         username=args.username,
         password=args.password,
         cookies=args.cookies,
+        proxy=args.proxy,
         cache_session=args.cache_session,
     )
     # setting the caching default so that we can avoid future login attemps.
